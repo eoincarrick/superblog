@@ -1,4 +1,4 @@
-export interface Home {
+export interface HomeSchema {
   author: {
     name: string;
     image: string;

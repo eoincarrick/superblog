@@ -6,7 +6,7 @@ export interface Category {
   };
   image: string;
   body: string;
-  id: number;
+  _id: string;
   post: {
     author: {
       name: string;
@@ -28,7 +28,7 @@ export interface Category {
         current: string;
       };
     };
-    body: string;
+    body: [object];
     title: string;
     featured_post: boolean;
     recommended_post: boolean;

@@ -2,10 +2,20 @@ import React from 'react';
 import { client } from '../../library/client';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { Author } from '../../model/author';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { AuthorSchema } from '../../model/author';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+import type {
+  GetStaticPathsResult,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+} from 'next';
 
-const Author: React.FC<Author> = ({ result }: Author) => {
+interface Props {
+  result: AuthorSchema[];
+}
+
+const Author: NextPage<Props> = ({ result }) => {
   console.log(result);
   const router = useRouter();
 
@@ -26,6 +36,18 @@ const Author: React.FC<Author> = ({ result }: Author) => {
 
 export default Author;
 
+interface PropsPath {
+  query_paths: {
+    slug: {
+      current: string;
+    };
+  };
+}
+
+interface AuthorParams extends ParsedUrlQuery {
+  author: string;
+}
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const query = `*[_type == "author"]{
   slug{
@@ -35,7 +57,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const query_paths = await client.fetch(query);
 
-  const paths = query_paths.map((path) => ({
+  const paths = query_paths.map((path: PropsPath[]) => ({
     params: {
       author: path.slug.current,
     },
@@ -48,8 +70,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({
-  params: { author },
-}) => {
+  author,
+}: GetStaticPropsContext<PropsPath>): Promise<
+  GetStaticPropsResult<AuthorSchema>
+> => {
+  // const  = context.params as AuthorParams;
   const query = `*[_type == "author" && slug.current == "${author}"]{
   name,
   slug,

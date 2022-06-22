@@ -1,4 +1,4 @@
-export interface Author {
+export interface AuthorSchema {
   name: string;
   slug: {
     _type: string;
@@ -6,7 +6,7 @@ export interface Author {
   };
   image: string;
   bio: string;
-  id: number;
+  _id: string;
   post: {
     author: {
       name: string;
@@ -28,7 +28,7 @@ export interface Author {
         current: string;
       };
     };
-    body: string;
+    body: [object];
     title: string;
     featured_post: boolean;
     recommended_post: boolean;
