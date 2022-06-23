@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { client } from '../../library/client';
 import Head from 'next/head';
 import Image from 'next/image';
+import { GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
 const Post = ({ result }) => {
   //console.log(result);
@@ -31,6 +33,10 @@ const Post = ({ result }) => {
 
 export default Post;
 
+interface PostParams extends ParsedUrlQuery {
+  post: string;
+}
+
 export const getStaticPaths = async () => {
   const query = `*[_type == "post"]{
   slug{
@@ -40,7 +46,7 @@ export const getStaticPaths = async () => {
 
   const post_paths = await client.fetch(query);
 
-  const paths = post_paths.map((path) => ({
+  const paths = post_paths.map((path: string) => ({
     params: {
       post: path.slug.current,
     },
@@ -52,7 +58,7 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async ({ params: { post } }) => {
+export const getStaticProps: GetStaticProps = async ({ params: { post } }) => {
   const postDetails = `*[_type == "post" && slug.current == "${post}"][0]{
   _id,
   publishedAt,

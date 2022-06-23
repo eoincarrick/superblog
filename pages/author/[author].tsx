@@ -3,7 +3,7 @@ import { client } from '../../library/client';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { AuthorSchema } from '../../model/author';
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, NextPage, PreviewData } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import type {
   GetStaticPathsResult,
@@ -11,11 +11,7 @@ import type {
   GetStaticPropsResult,
 } from 'next';
 
-interface Props {
-  result: AuthorSchema[];
-}
-
-const Author: NextPage<Props> = ({ result }) => {
+const Author: NextPage<{ result: AuthorSchema[] }> = ({ result }) => {
   console.log(result);
   const router = useRouter();
 
@@ -69,12 +65,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({
-  author,
-}: GetStaticPropsContext<PropsPath>): Promise<
-  GetStaticPropsResult<AuthorSchema>
-> => {
-  // const  = context.params as AuthorParams;
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { author } = context.params as AuthorParams;
   const query = `*[_type == "author" && slug.current == "${author}"]{
   name,
   slug,
@@ -101,7 +93,7 @@ export const getStaticProps: GetStaticProps = async ({
 }
 }`;
 
-  const result = await client.fetch(query);
+  const result: AuthorSchema[] = await client.fetch(query);
 
   if (!result) {
     return {
