@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
+import { NextPage } from 'next';
 
-const Posts = () => {
+const Posts: NextPage = () => {
   return (
     <div>
       <Head>

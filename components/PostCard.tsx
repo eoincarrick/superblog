@@ -12,7 +12,7 @@ interface Props {
   post: HomeSchema;
 }
 
-const PostCard = ({ post }: Props): JSX.Element => {
+const PostCard: React.FunctionComponent<Props> = ({ post }): JSX.Element => {
   console.log(post);
   const {
     author,

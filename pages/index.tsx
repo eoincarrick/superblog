@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { client } from '../library/client';
 import { HomeSchema } from '../model';
 import css from '../styles/Home.module.css';
-import { PostCard, Navbar, Layout } from '../components';
+import { PostCard, Navbar } from '../components';
 
 interface Props {
   post_card: HomeSchema[];
@@ -30,7 +30,6 @@ const Home: NextPage<Props> = ({ post_card }) => {
             <PostCard post={post} key={index} />
           ))}
         </div>
-        <Layout />
       </div>
     </div>
   );

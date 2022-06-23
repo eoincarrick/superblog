@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
+import { NextPage } from 'next';
 
-const Topics = () => {
+const Topics: NextPage = () => {
   return (
     <div>
       <Head>

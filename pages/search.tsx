@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
+import { NextPage } from 'next';
 
-const Search = () => {
+const Search: NextPage = () => {
   return (
     <div>
       <Head>

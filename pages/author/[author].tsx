@@ -44,7 +44,7 @@ interface AuthorParams extends ParsedUrlQuery {
   author: string;
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths<PropsPath> = async () => {
   const query = `*[_type == "author"]{
   slug{
   current,
@@ -53,7 +53,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const query_paths = await client.fetch(query);
 
-  const paths = query_paths.map((path: PropsPath[]) => ({
+  const paths = query_paths.map((path) => ({
     params: {
       author: path.slug.current,
     },
@@ -65,8 +65,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { author } = context.params as AuthorParams;
+export const getStaticProps: GetStaticProps<PropsPath, AuthorSchema[]> = async (
+  context
+) => {
+  const { author } = context.params 
   const query = `*[_type == "author" && slug.current == "${author}"]{
   name,
   slug,
@@ -93,7 +95,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 }`;
 
-  const result: AuthorSchema[] = await client.fetch(query);
+  const result = await client.fetch(query);
 
   if (!result) {
     return {

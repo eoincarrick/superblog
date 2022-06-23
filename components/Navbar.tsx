@@ -2,7 +2,7 @@ import React from 'react';
 import css from '../styles/Navbar.module.css';
 import Image from 'next/image';
 
-const Navbar = () => {
+const Navbar: React.FunctionComponent = () => {
   return (
     <nav className={css.container}>
       <ul className={css.flex}>
