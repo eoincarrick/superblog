@@ -10,6 +10,7 @@ import type {
   GetStaticPropsContext,
   GetStaticPropsResult,
 } from 'next';
+import { PagePath } from '../../model/PagePath';
 
 const Author: NextPage<{ result: AuthorSchema[] }> = ({ result }) => {
   console.log(result);
@@ -32,19 +33,15 @@ const Author: NextPage<{ result: AuthorSchema[] }> = ({ result }) => {
 
 export default Author;
 
-interface PropsPath {
-  query_paths: {
-    slug: {
-      current: string;
-    };
-  };
+interface Props {
+  author: string[];
 }
 
 interface AuthorParams extends ParsedUrlQuery {
   author: string;
 }
 
-export const getStaticPaths: GetStaticPaths<PropsPath> = async () => {
+export const getStaticPaths: GetStaticPaths<Props> = async () => {
   const query = `*[_type == "author"]{
   slug{
   current,
@@ -53,7 +50,7 @@ export const getStaticPaths: GetStaticPaths<PropsPath> = async () => {
 
   const query_paths = await client.fetch(query);
 
-  const paths = query_paths.map((path) => ({
+  const paths: PagePath[] = query_paths.map((path: string) => ({
     params: {
       author: path.slug.current,
     },
@@ -65,10 +62,10 @@ export const getStaticPaths: GetStaticPaths<PropsPath> = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<PropsPath, AuthorSchema[]> = async (
+export const getStaticProps: GetStaticProps<Props, AuthorSchema> = async (
   context
 ) => {
-  const { author } = context.params 
+  const { author } = context.params as AuthorParams;
   const query = `*[_type == "author" && slug.current == "${author}"]{
   name,
   slug,
