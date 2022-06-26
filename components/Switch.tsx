@@ -33,6 +33,6 @@ const Switch: React.FunctionComponent<{}> = () => {
     default:
       break;
   }
-};
+}
 
 export default Switch;
