@@ -12,6 +12,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.get('/', async (request, response)=>{
+  response.status(200).json({Message:'System Good!'})
+})
+
 app.use('/api/v1/files', require('./routes/files'));
 
 app.listen(PORT, () =>
