@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', async (request, response)=>{
-  response.status(200).json({Message:'System Good!'})
+  response.status(200).send('System Good!')
 })
 
 app.use('/api/v1/files', require('./routes/files'));
