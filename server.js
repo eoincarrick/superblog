@@ -19,6 +19,7 @@ server.get('/', (request, response) => {
 });
 
 server.use('/api/v1/files', require('./routes/files'));
+server.use('/api/v1/tts', require('./routes/tts'));
 
 server.listen(PORT, () =>
   console.log(`Server running on: http://localhost:${PORT}`)
