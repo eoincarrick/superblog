@@ -19,8 +19,8 @@ const PostFiles = async (request, response) => {
           throw error;
         }
       });
-      const result = await Promise.all(createFiles);
-      response.status(201).json({ result });
+      const url = await Promise.all(createFiles);
+      response.status(201).json({ url });
     }
   } catch (error) {
     const msg = 'Internal server error:';
