@@ -73,8 +73,9 @@ const PostTTS = async (request, response) => {
     response.json({ url });
     // }
   } catch (error) {
-    console.error('Error:', error);
-    response.status(500).json({ error: 'Something went wrong' });
+    const msg = 'Internal server error:';
+    console.error(msg, error);
+    response.status(500).json({ error: msg, success: false });
   }
 };
 

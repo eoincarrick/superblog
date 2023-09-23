@@ -1,16 +1,32 @@
 const { Client } = require('../utils/config/sanity');
 
-const PostFile = async (request, response) => {
+const PostFiles = async (request, response) => {
   try {
-    if (!request.file) {
-      return response.status(400).json({ error: 'No file uploaded' });
+    const files = request?.files;
+    if (Array.isArray(files)) {
+      const createFiles = files.map(async (file) => {
+        try {
+          console.log('file: ', file);
+          const postToSanity = await Client.assets.upload('file', file.buffer, {
+            filename: file.originalname,
+          });
+          return postToSanity.url;
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          response
+            .status(400)
+            .json({ error: 'Error uploading file.', success: false });
+          throw error;
+        }
+      });
+      const result = await Promise.all(createFiles);
+      response.status(201).json({ result });
     }
-    const fileBuffer = request.file.buffer;
-    const postToSanity = await Client.assets.upload('file', fileBuffer, { filename: `${request.file.originalname}` });
-    response.json({ url: postToSanity.url });
   } catch (error) {
-    console.log(error);
+    const msg = 'Internal server error:';
+    console.error(msg, error);
+    response.status(500).json({ error: msg, success: false });
   }
 };
 
-module.exports = { PostFile };
+module.exports = { PostFiles };

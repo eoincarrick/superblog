@@ -1,9 +1,8 @@
 const express = require('express');
 const { upload } = require('../utils/services');
-const { PostFiles } = require('../controller/files');
+const { PostFile } = require('../controller/file');
 
 const router = express.Router();
-
-router.post('/', upload.array('files', 5), PostFiles);
+router.post('/', upload.single('file'), PostFile);
 
 module.exports = router;
